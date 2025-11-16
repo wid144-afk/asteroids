@@ -14,6 +14,7 @@ def main():
 
     #groups and containers
     pygame.init()
+    pygame.font.init()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -24,6 +25,10 @@ def main():
     Asteroid.containers = asteroids, updatable, drawable
     AsteroidField.containers = updatable
     Shot.containers = shots , updatable, drawable
+
+    score = 0
+    score_increment = 10
+    
 
 
     dt = 0
@@ -51,6 +56,7 @@ def main():
                 sys.exit()
             for shot in shots:
                 if asteroid.collides_with(shot):
+                    score += score_increment
                     log_event("asteroid_shot")
                     asteroid.split()
                     shot.kill()
@@ -59,6 +65,9 @@ def main():
         screen.fill("black")
         for sprite in  drawable:
             sprite.draw(screen)
+        font = pygame.font.Font("PixelOperator.ttf", 30)
+        score_text = font.render(f'Score: {score}', True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))
         pygame.display.flip()
         dt = game_clock.tick(60) / 1000
 
